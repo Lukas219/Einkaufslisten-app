@@ -4,1698 +4,795 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Meine Einkaufsliste</title>
+<title>Meine Einkaufslisten</title>
 
 <link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
 <meta name="theme-color" content="#007aff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Einkauf">
 
 <style>
-
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-    background: #f2f2f7;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f2f7ff;
     color: #111;
-    transition: 0.25s;
-}
-
-body.dark {
-    background: #121212;
-    color: white;
 }
 
 header {
     background: #007aff;
     color: white;
-    padding: 22px 18px;
+    padding: 20px;
     text-align: center;
+}
+
+.header-logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 16px;
+    display: block;
+    margin: 0 auto 10px;
 }
 
 header h1 {
     margin: 0;
-    font-size: 28px;
-}
-
-header p {
-    margin: 5px 0 0;
-    opacity: 0.85;
-}
-
-.app-badge {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.2);
-    font-size: 13px;
-    margin-top: 8px;
+    font-size: 25px;
 }
 
 .container {
     max-width: 700px;
     margin: auto;
     padding: 15px;
-    padding-bottom: 40px;
 }
 
-.karte {
+.card {
     background: white;
     border-radius: 18px;
-    padding: 17px;
+    padding: 16px;
     margin-bottom: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+    box-shadow: 0 3px 12px rgba(0,0,0,.08);
 }
 
-.dark .karte {
-    background: #242424;
+input, select, button {
+    font: inherit;
 }
 
-h2, h3 {
-    margin-top: 0;
-}
-
-input,
-select,
-button {
+input, select {
     width: 100%;
-    padding: 13px;
-    margin-top: 8px;
+    padding: 12px;
+    border: 1px solid #ddd;
     border-radius: 12px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-}
-
-.dark input,
-.dark select {
-    background: #333;
-    color: white;
-    border-color: #555;
+    margin-bottom: 10px;
 }
 
 button {
     border: none;
-    background: #007aff;
-    color: white;
-    font-weight: 600;
+    border-radius: 12px;
+    padding: 11px 15px;
     cursor: pointer;
 }
 
-button:active {
-    transform: scale(0.98);
+.primary {
+    background: #007aff;
+    color: white;
+    width: 100%;
 }
 
-.gefahr {
+.danger {
     background: #ff3b30;
+    color: white;
 }
 
-.gruen {
-    background: #34c759;
+.secondary {
+    background: #e9eef5;
 }
 
-.orange {
-    background: #ff9500;
-}
-
-.menue {
-    display: flex;
-    gap: 8px;
-}
-
-.menue button {
-    flex: 1;
-}
-
-.artikel-zeile {
+.item {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 14px 4px;
-    border-bottom: 1px solid #ddd;
+    padding: 12px 5px;
+    border-bottom: 1px solid #eee;
 }
 
-.dark .artikel-zeile {
-    border-color: #444;
+.item:last-child {
+    border-bottom: none;
 }
 
-.artikel-text {
+.item-info {
     flex: 1;
     cursor: pointer;
 }
 
-.artikel-text strong {
-    font-size: 17px;
+.item-name {
+    font-weight: 600;
 }
 
-.artikel-text small {
-    opacity: 0.65;
+.item-details {
+    font-size: 13px;
+    color: #777;
+    margin-top: 3px;
 }
 
-.gekauft {
+.purchased .item-name {
     text-decoration: line-through;
-    opacity: 0.45;
+    opacity: .5;
 }
 
-.kleine-buttons {
+.actions {
     display: flex;
     gap: 5px;
 }
 
-.kleine-buttons button {
-    width: auto;
-    margin: 0;
-    padding: 8px 10px;
-}
-
-.progress-container {
-    height: 14px;
-    background: #ddd;
-    border-radius: 20px;
-    overflow: hidden;
-    margin: 12px 0;
-}
-
-.dark .progress-container {
-    background: #444;
+.actions button {
+    padding: 7px 10px;
 }
 
 .progress {
+    width: 100%;
+    height: 10px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.progress-bar {
     height: 100%;
     width: 0%;
     background: #34c759;
-    transition: width 0.3s;
+    transition: width .3s;
 }
 
-.statistik {
+.stats {
+    display: flex;
+    justify-content: space-between;
     font-size: 14px;
-    opacity: 0.7;
 }
 
-.toast {
-    position: fixed;
-    left: 15px;
-    right: 15px;
-    bottom: 20px;
-    background: #222;
+.list-buttons {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.list-button {
+    white-space: nowrap;
+    background: #e9eef5;
+}
+
+.list-button.active {
+    background: #007aff;
     color: white;
-    padding: 12px;
-    border-radius: 14px;
-    text-align: center;
-    z-index: 9999;
-    display: none;
 }
 
-.undo {
-    background: #ff9500;
-    margin-top: 8px;
+.search {
+    margin-top: 10px;
 }
 
 .hidden {
     display: none;
 }
 
-.empty {
-    text-align: center;
-    padding: 25px 10px;
-    opacity: 0.55;
+.toast {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s;
+    z-index: 999;
 }
 
-.info {
-    opacity: 0.65;
-    font-size: 14px;
+.toast.show {
+    opacity: 1;
 }
 
-.install-box {
-    text-align: center;
+.dark {
+    background: #121212;
+    color: white;
 }
 
-.install-box button {
-    margin-top: 5px;
+.dark .card {
+    background: #1e1e1e;
 }
 
+.dark input,
+.dark select {
+    background: #292929;
+    color: white;
+    border-color: #444;
+}
+
+.dark .secondary,
+.dark .list-button {
+    background: #333;
+    color: white;
+}
+
+.dark .item {
+    border-color: #444;
+}
+
+.dark .item-details {
+    color: #aaa;
+}
+
+h2 {
+    margin-top: 0;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-
-    <h1>🛒 Meine Einkaufsliste</h1>
-
-    <p>Einfach einkaufen. Nichts vergessen.</p>
-
-    <div class="app-badge">
-        Version 7.0
-    </div>
-
+    <img src="icons/icon-192.png" class="header-logo" alt="Einkaufslisten Logo">
+    <h1>Meine Einkaufslisten</h1>
 </header>
 
 <div class="container">
 
-    <!-- NAVIGATION -->
+    <div class="card">
+        <h2>Meine Listen</h2>
 
-    <div class="karte">
+        <div id="listButtons" class="list-buttons"></div>
 
-        <div class="menue">
-
-            <button onclick="einkaufOeffnen()">
-                🛒 Einkauf
-            </button>
-
-            <button onclick="einstellungenOeffnen()">
-                ⚙️ Einstellungen
-            </button>
-
-        </div>
-
+        <button class="primary" onclick="neueListe()">
+            + Neue Liste
+        </button>
     </div>
 
+    <div class="card">
+        <h2 id="listenTitel">Einkaufsliste</h2>
 
-    <!-- EINKAUF -->
+        <input
+            id="artikel"
+            type="text"
+            placeholder="Was möchtest du kaufen?"
+            onkeydown="enterHinzufuegen(event)"
+        >
 
-    <div id="einkaufBereich">
+        <input
+            id="menge"
+            type="number"
+            min="1"
+            value="1"
+            placeholder="Menge"
+        >
 
-        <div class="karte">
+        <select id="kategorie">
+            <option value="Sonstiges">Sonstiges</option>
+            <option value="Obst & Gemüse">Obst & Gemüse</option>
+            <option value="Milchprodukte">Milchprodukte</option>
+            <option value="Fleisch">Fleisch</option>
+            <option value="Getränke">Getränke</option>
+            <option value="Süßigkeiten">Süßigkeiten</option>
+            <option value="Tiefkühl">Tiefkühl</option>
+            <option value="Haushalt">Haushalt</option>
+        </select>
 
-            <h2 id="listenTitel">
-                Supermarkt
-            </h2>
+        <button class="primary" onclick="artikelHinzufuegen()">
+            + Artikel hinzufügen
+        </button>
 
-            <select
-                id="listenAuswahl"
-                onchange="listeWechseln()">
-            </select>
-
-            <button onclick="listeErstellen()">
-                ➕ Neue Einkaufsliste
-            </button>
-
-            <button
-                class="gefahr"
-                onclick="listeLoeschen()">
-
-                🗑️ Diese Liste löschen
-
-            </button>
-
-        </div>
-
-
-        <!-- ARTIKEL -->
-
-        <div class="karte">
-
-            <h2>➕ Artikel hinzufügen</h2>
-
-            <input
-                id="artikel"
-                placeholder="z. B. Milch">
-
-            <input
-                id="menge"
-                type="number"
-                min="1"
-                value="1">
-
-            <select id="kategorie">
-
-                <option>Sonstiges</option>
-                <option>Obst & Gemüse</option>
-                <option>Milchprodukte</option>
-                <option>Fleisch</option>
-                <option>Getränke</option>
-                <option>Süßigkeiten</option>
-                <option>Tiefkühl</option>
-                <option>Haushalt</option>
-
-            </select>
-
-            <button onclick="hinzufuegen()">
-                ➕ Hinzufügen
-            </button>
-
-        </div>
-
-
-        <!-- ARTIKELLISTE -->
-
-        <div class="karte">
-
-            <h2>📋 Meine Artikel</h2>
-
-            <input
-                id="suche"
-                placeholder="🔎 Artikel suchen..."
-                oninput="anzeigen()">
-
-            <p
-                id="statistik"
-                class="statistik">
-            </p>
-
-            <div class="progress-container">
-
-                <div
-                    class="progress"
-                    id="progress">
-                </div>
-
-            </div>
-
-            <div id="artikelListe"></div>
-
-            <button
-                class="gefahr"
-                onclick="gekaufteLoeschen()">
-
-                🗑️ Gekaufte löschen
-
-            </button>
-
-        </div>
-
+        <input
+            id="suche"
+            class="search"
+            type="text"
+            placeholder="🔎 Artikel suchen..."
+            oninput="anzeigen()"
+        >
     </div>
 
-
-    <!-- EINSTELLUNGEN -->
-
-    <div
-        id="einstellungen"
-        class="hidden">
-
-        <div class="karte">
-
-            <h2>⚙️ Einstellungen</h2>
-
-            <button onclick="darkMode()">
-                🌙 Dark Mode umschalten
-            </button>
-
+    <div class="card">
+        <div class="stats">
+            <span>Artikel: <b id="anzahl">0</b></span>
+            <span>Gekauft: <b id="gekauft">0</b></span>
         </div>
 
-
-        <!-- INSTALLATION -->
-
-        <div class="karte install-box">
-
-            <h2>📱 App installieren</h2>
-
-            <p class="info">
-                Wenn dein Gerät die Installation unterstützt,
-                kannst du die Einkaufslisten-App zum
-                Home-Bildschirm hinzufügen.
-            </p>
-
-            <button
-                id="installButton"
-                class="gruen"
-                onclick="installApp()">
-
-                📲 App installieren
-
-            </button>
-
+        <div class="progress">
+            <div id="progressBar" class="progress-bar"></div>
         </div>
+    </div>
 
+    <div class="card">
+        <div id="liste"></div>
 
-        <!-- BACKUP -->
+        <button class="secondary" onclick="gekaufteLoeschen()">
+            Gekaufte löschen
+        </button>
 
-        <div class="karte">
+        <button class="secondary" onclick="rueckgaengig()">
+            ↩ Rückgängig
+        </button>
+    </div>
 
-            <h2>💾 Backup</h2>
+    <div class="card">
+        <h2>⚙️ Einstellungen</h2>
 
-            <p class="info">
-                Speichere deine Einkaufslisten als Datei
-                und stelle sie später wieder her.
-            </p>
+        <button class="secondary" onclick="darkMode()">
+            🌙 Dark Mode
+        </button>
 
-            <button
-                class="gruen"
-                onclick="exportieren()">
+        <br><br>
 
-                💾 Backup speichern
+        <button class="secondary" onclick="backupExportieren()">
+            💾 Backup speichern
+        </button>
 
-            </button>
+        <br><br>
 
-            <input
-                type="file"
-                id="importDatei"
-                accept=".json">
+        <button class="secondary" onclick="backupImportieren()">
+            📂 Backup laden
+        </button>
 
-            <button onclick="importieren()">
+        <br><br>
 
-                📥 Backup wiederherstellen
-
-            </button>
-
-        </div>
-
-
-        <!-- DATEN -->
-
-        <div class="karte">
-
-            <h2>🗑️ Daten</h2>
-
-            <p class="info">
-                Dadurch werden alle Listen auf diesem
-                Gerät gelöscht.
-            </p>
-
-            <button
-                class="gefahr"
-                onclick="allesZuruecksetzen()">
-
-                🗑️ Alle Daten löschen
-
-            </button>
-
-        </div>
-
-
-        <!-- INFO -->
-
-        <div class="karte">
-
-            <h2>ℹ️ Über die App</h2>
-
-            <p>
-                🛒 Meine Einkaufsliste
-            </p>
-
-            <p class="info">
-                Version 7.0
-                <br>
-                HTML · CSS · JavaScript
-                <br>
-                PWA
-            </p>
-
-            <p class="info">
-                Kostenlos und ohne Anmeldung.
-            </p>
-
-        </div>
-
+        <button class="danger" onclick="allesZuruecksetzen()">
+            🗑️ Alle Daten löschen
+        </button>
     </div>
 
 </div>
 
+<div id="toast" class="toast"></div>
 
-<div
-    class="toast"
-    id="toast">
-</div>
-
+<input
+    id="backupDatei"
+    type="file"
+    accept=".json"
+    style="display:none"
+    onchange="backupDateiLaden(event)"
+>
 
 <script>
 
-/* =========================
-   DATEN
-========================= */
-
-let listen =
-    JSON.parse(
-        localStorage.getItem("listen")
-    ) || {
-        "Supermarkt": []
-    };
+let listen = JSON.parse(localStorage.getItem("listen")) || {
+    "Meine Einkaufsliste": []
+};
 
 let aktuelleListe =
-    localStorage.getItem(
-        "aktuelleListe"
-    ) || "Supermarkt";
+    localStorage.getItem("aktuelleListe") || "Meine Einkaufsliste";
 
-let dunkel =
-    localStorage.getItem(
-        "darkMode"
-    ) === "true";
-
-let rueckgaengig = null;
-
-
-/* =========================
-   SPEICHERN
-========================= */
+let letzterStand = null;
 
 function speichern() {
-
-    localStorage.setItem(
-        "listen",
-        JSON.stringify(listen)
-    );
-
-    localStorage.setItem(
-        "aktuelleListe",
-        aktuelleListe
-    );
-
+    localStorage.setItem("listen", JSON.stringify(listen));
+    localStorage.setItem("aktuelleListe", aktuelleListe);
 }
 
+function toast(text) {
+    const element = document.getElementById("toast");
 
-/* =========================
-   MELDUNG
-========================= */
-
-function meldung(text) {
-
-    const toast =
-        document.getElementById(
-            "toast"
-        );
-
-    toast.innerText = text;
-
-    toast.style.display =
-        "block";
+    element.textContent = text;
+    element.classList.add("show");
 
     setTimeout(() => {
-
-        toast.style.display =
-            "none";
-
-    }, 2500);
-
+        element.classList.remove("show");
+    }, 2000);
 }
 
+function artikelHinzufuegen() {
 
-/* =========================
-   DARK MODE
-========================= */
+    const artikelInput = document.getElementById("artikel");
+    const mengeInput = document.getElementById("menge");
+    const kategorieInput = document.getElementById("kategorie");
 
-function darkMode() {
-
-    dunkel = !dunkel;
-
-    document.body.classList.toggle(
-        "dark",
-        dunkel
-    );
-
-    localStorage.setItem(
-        "darkMode",
-        dunkel
-    );
-
-    meldung(
-        dunkel
-        ? "🌙 Dark Mode aktiviert"
-        : "☀️ Heller Modus aktiviert"
-    );
-
-}
-
-
-/* =========================
-   LISTEN
-========================= */
-
-function listenAnzeigen() {
-
-    const select =
-        document.getElementById(
-            "listenAuswahl"
-        );
-
-    select.innerHTML = "";
-
-    Object.keys(listen).forEach(
-        name => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-            option.value = name;
-            option.textContent = name;
-
-            if (
-                name === aktuelleListe
-            ) {
-                option.selected = true;
-            }
-
-            select.appendChild(
-                option
-            );
-
-        }
-    );
-
-    document.getElementById(
-        "listenTitel"
-    ).innerText =
-        aktuelleListe;
-
-}
-
-
-/* =========================
-   LISTE WECHSELN
-========================= */
-
-function listeWechseln() {
-
-    aktuelleListe =
-        document.getElementById(
-            "listenAuswahl"
-        ).value;
-
-    speichern();
-
-    anzeigen();
-
-}
-
-
-/* =========================
-   NEUE LISTE
-========================= */
-
-function listeErstellen() {
-
-    const name =
-        prompt(
-            "Wie soll die Liste heißen?"
-        );
-
-    if (!name) return;
-
-    const sauber =
-        name.trim();
-
-    if (!sauber) return;
-
-    if (listen[sauber]) {
-
-        meldung(
-            "❌ Diese Liste gibt es schon."
-        );
-
-        return;
-    }
-
-    listen[sauber] = [];
-
-    aktuelleListe =
-        sauber;
-
-    speichern();
-
-    anzeigen();
-
-    meldung(
-        "✅ Neue Liste erstellt"
-    );
-
-}
-
-
-/* =========================
-   LISTE LÖSCHEN
-========================= */
-
-function listeLoeschen() {
-
-    const namen =
-        Object.keys(listen);
-
-    if (
-        namen.length <= 1
-    ) {
-
-        meldung(
-            "❌ Mindestens eine Liste muss bleiben."
-        );
-
-        return;
-    }
-
-    if (
-        !confirm(
-            `„${aktuelleListe}“ wirklich löschen?`
-        )
-    ) {
-        return;
-    }
-
-    delete listen[
-        aktuelleListe
-    ];
-
-    aktuelleListe =
-        Object.keys(listen)[0];
-
-    speichern();
-
-    anzeigen();
-
-    meldung(
-        "🗑️ Liste gelöscht"
-    );
-
-}
-
-
-/* =========================
-   ARTIKEL HINZUFÜGEN
-========================= */
-
-function hinzufuegen() {
-
-    const artikel =
-        document.getElementById(
-            "artikel"
-        ).value.trim();
-
-    const menge =
-        Number(
-            document.getElementById(
-                "menge"
-            ).value
-        ) || 1;
-
-    const kategorie =
-        document.getElementById(
-            "kategorie"
-        ).value;
+    const artikel = artikelInput.value.trim();
+    const menge = parseInt(mengeInput.value) || 1;
+    const kategorie = kategorieInput.value;
 
     if (!artikel) {
-
-        meldung(
-            "❌ Bitte einen Artikel eingeben."
-        );
-
+        toast("Bitte einen Artikel eingeben.");
         return;
     }
 
-    listen[
-        aktuelleListe
-    ].push({
+    letzterStand = JSON.stringify(listen);
 
-        artikel:
-            artikel,
-
-        menge:
-            menge,
-
-        kategorie:
-            kategorie,
-
-        gekauft:
-            false
-
+    listen[aktuelleListe].push({
+        artikel: artikel,
+        menge: menge,
+        kategorie: kategorie,
+        gekauft: false
     });
 
+    artikelInput.value = "";
+    mengeInput.value = "1";
+
     speichern();
-
-    document.getElementById(
-        "artikel"
-    ).value = "";
-
-    document.getElementById(
-        "menge"
-    ).value = 1;
-
     anzeigen();
 
-    meldung(
-        "✅ Artikel hinzugefügt"
-    );
-
+    toast("Artikel hinzugefügt ✓");
 }
 
-
-/* =========================
-   ANZEIGEN
-========================= */
+function enterHinzufuegen(event) {
+    if (event.key === "Enter") {
+        artikelHinzufuegen();
+    }
+}
 
 function anzeigen() {
 
-    listenAnzeigen();
+    const container = document.getElementById("liste");
+    const suche =
+        document.getElementById("suche").value.toLowerCase();
 
-    const container =
-        document.getElementById(
-            "artikelListe"
-        );
+    const aktuelleArtikel = listen[aktuelleListe];
 
     container.innerHTML = "";
 
-    const suche =
-        document.getElementById(
-            "suche"
-        ).value.toLowerCase();
+    aktuelleArtikel
+        .map((artikel, index) => ({ artikel, index }))
+        .filter(obj =>
+            obj.artikel.artikel.toLowerCase().includes(suche)
+        )
+        .forEach(obj => {
 
-    const liste =
-        listen[
-            aktuelleListe
-        ];
+            const artikel = obj.artikel;
+            const index = obj.index;
 
-    let sichtbar = 0;
+            const div = document.createElement("div");
 
-    liste.forEach(
-        (item, index) => {
+            div.className =
+                "item " + (artikel.gekauft ? "purchased" : "");
 
-            if (
-                !item.artikel
-                    .toLowerCase()
-                    .includes(suche)
-            ) {
-                return;
-            }
+            div.innerHTML = `
+                <input
+                    type="checkbox"
+                    ${artikel.gekauft ? "checked" : ""}
+                    onchange="gekauftAendern(${index})"
+                >
 
-            sichtbar++;
+                <div class="item-info"
+                     onclick="gekauftAendern(${index})">
 
-            const zeile =
-                document.createElement(
-                    "div"
-                );
+                    <div class="item-name">
+                        ${escapeHTML(artikel.artikel)}
+                    </div>
 
-            zeile.className =
-                "artikel-zeile";
+                    <div class="item-details">
+                        Menge: ${artikel.menge}
+                        · ${escapeHTML(artikel.kategorie)}
+                    </div>
 
+                </div>
 
-            const text =
-                document.createElement(
-                    "div"
-                );
+                <div class="actions">
 
-            text.className =
-                "artikel-text";
+                    <button
+                        class="secondary"
+                        onclick="event.stopPropagation(); artikelBearbeiten(${index})">
+                        ✏️
+                    </button>
 
-            if (
-                item.gekauft
-            ) {
+                    <button
+                        class="danger"
+                        onclick="event.stopPropagation(); artikelLoeschen(${index})">
+                        🗑️
+                    </button>
 
-                text.classList.add(
-                    "gekauft"
-                );
+                </div>
+            `;
 
-            }
+            container.appendChild(div);
+        });
 
-            text.innerHTML =
-                `<strong>
-                    ${escapeHTML(
-                        item.artikel
-                    )}
-                </strong>
-                <br>
-                <small>
-                    ${item.menge} ×
-                    ${escapeHTML(
-                        item.kategorie
-                    )}
-                </small>`;
-
-            text.onclick =
-                () =>
-                    artikelKaufen(
-                        index
-                    );
-
-
-            const buttons =
-                document.createElement(
-                    "div"
-                );
-
-            buttons.className =
-                "kleine-buttons";
-
-
-            const bearbeiten =
-                document.createElement(
-                    "button"
-                );
-
-            bearbeiten.innerText =
-                "✏️";
-
-            bearbeiten.onclick =
-                () =>
-                    artikelBearbeiten(
-                        index
-                    );
-
-
-            const loeschen =
-                document.createElement(
-                    "button"
-                );
-
-            loeschen.innerText =
-                "🗑️";
-
-            loeschen.onclick =
-                () =>
-                    artikelLoeschen(
-                        index
-                    );
-
-
-            buttons.appendChild(
-                bearbeiten
-            );
-
-            buttons.appendChild(
-                loeschen
-            );
-
-            zeile.appendChild(
-                text
-            );
-
-            zeile.appendChild(
-                buttons
-            );
-
-            container.appendChild(
-                zeile
-            );
-
-        }
-    );
-
-
-    if (
-        sichtbar === 0
-    ) {
-
-        container.innerHTML =
-            `<div class="empty">
-                🛒 Keine Artikel gefunden.
-            </div>`;
-
-    }
-
-    statistik();
-
+    statistikAnzeigen();
+    listenAnzeigen();
 }
 
+function escapeHTML(text) {
+    return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
 
-/* =========================
-   KAUFEN
-========================= */
+function gekauftAendern(index) {
 
-function artikelKaufen(index) {
+    letzterStand = JSON.stringify(listen);
 
-    listen[
-        aktuelleListe
-    ][index].gekauft =
-        !listen[
-            aktuelleListe
-        ][index].gekauft;
+    listen[aktuelleListe][index].gekauft =
+        !listen[aktuelleListe][index].gekauft;
 
     speichern();
-
     anzeigen();
-
 }
-
-
-/* =========================
-   BEARBEITEN
-========================= */
-
-function artikelBearbeiten(index) {
-
-    const item =
-        listen[
-            aktuelleListe
-        ][index];
-
-    const neuerName =
-        prompt(
-            "Artikel bearbeiten:",
-            item.artikel
-        );
-
-    if (!neuerName) return;
-
-    const sauber =
-        neuerName.trim();
-
-    if (!sauber) return;
-
-    item.artikel =
-        sauber;
-
-    speichern();
-
-    anzeigen();
-
-    meldung(
-        "✏️ Artikel geändert"
-    );
-
-}
-
-
-/* =========================
-   EINZELN LÖSCHEN
-========================= */
 
 function artikelLoeschen(index) {
 
-    const geloescht =
-        listen[
-            aktuelleListe
-        ][index];
+    letzterStand = JSON.stringify(listen);
 
-    rueckgaengig = {
-
-        liste:
-            aktuelleListe,
-
-        mehrere:
-            false,
-
-        artikel:
-            geloescht,
-
-        index:
-            index
-
-    };
-
-    listen[
-        aktuelleListe
-    ].splice(
-        index,
-        1
-    );
+    listen[aktuelleListe].splice(index, 1);
 
     speichern();
-
     anzeigen();
 
-    zeigeUndo();
-
+    toast("Artikel gelöscht");
 }
 
+function artikelBearbeiten(index) {
 
-/* =========================
-   GEKAUFTE LÖSCHEN
-========================= */
+    const artikel = listen[aktuelleListe][index];
 
-function gekaufteLoeschen() {
+    const neuerName =
+        prompt("Artikel bearbeiten:", artikel.artikel);
 
-    const gekauft =
-        listen[
-            aktuelleListe
-        ].filter(
-            item =>
-                item.gekauft
+    if (neuerName === null) return;
+
+    if (!neuerName.trim()) return;
+
+    const neueMenge =
+        prompt("Menge:", artikel.menge);
+
+    letzterStand = JSON.stringify(listen);
+
+    artikel.artikel = neuerName.trim();
+
+    if (neueMenge !== null && neueMenge !== "") {
+        artikel.menge = parseInt(neueMenge) || artikel.menge;
+    }
+
+    speichern();
+    anzeigen();
+
+    toast("Artikel geändert ✓");
+}
+
+function gekauftLoeschen() {
+
+    letzterStand = JSON.stringify(listen);
+
+    listen[aktuelleListe] =
+        listen[aktuelleListe].filter(
+            artikel => !artikel.gekauft
         );
 
-    if (
-        gekauft.length === 0
-    ) {
+    speichern();
+    anzeigen();
 
-        meldung(
-            "ℹ️ Keine gekauften Artikel."
-        );
+    toast("Gekaufte Artikel gelöscht");
+}
 
+function rueckgaengig() {
+
+    if (!letzterStand) {
+        toast("Nichts rückgängig zu machen");
         return;
     }
 
-    rueckgaengig = {
+    listen = JSON.parse(letzterStand);
 
-        liste:
-            aktuelleListe,
-
-        mehrere:
-            true,
-
-        artikel:
-            gekauft
-
-    };
-
-    listen[
-        aktuelleListe
-    ] =
-        listen[
-            aktuelleListe
-        ].filter(
-            item =>
-                !item.gekauft
-        );
+    letzterStand = null;
 
     speichern();
-
     anzeigen();
 
-    zeigeUndo();
-
+    toast("Rückgängig ✓");
 }
 
+function statistikAnzeigen() {
 
-/* =========================
-   UNDO
-========================= */
+    const artikel = listen[aktuelleListe];
 
-function zeigeUndo() {
-
-    const toast =
-        document.getElementById(
-            "toast"
-        );
-
-    toast.innerHTML =
-        `Gelöscht
-        <button
-            class="undo"
-            onclick="rueckgaengigMachen()">
-            ↩️ Rückgängig
-        </button>`;
-
-    toast.style.display =
-        "block";
-
-    setTimeout(
-        () => {
-
-            rueckgaengig =
-                null;
-
-            toast.style.display =
-                "none";
-
-        },
-        5000
-    );
-
-}
-
-
-function rueckgaengigMachen() {
-
-    if (
-        !rueckgaengig
-    ) return;
-
-    const daten =
-        rueckgaengig;
-
-    if (
-        daten.mehrere
-    ) {
-
-        listen[
-            daten.liste
-        ] =
-            listen[
-                daten.liste
-            ].concat(
-                daten.artikel
-            );
-
-    } else {
-
-        listen[
-            daten.liste
-        ].splice(
-            daten.index,
-            0,
-            daten.artikel
-        );
-
-    }
-
-    aktuelleListe =
-        daten.liste;
-
-    rueckgaengig =
-        null;
-
-    speichern();
-
-    anzeigen();
-
-    document.getElementById(
-        "toast"
-    ).style.display =
-        "none";
-
-    meldung(
-        "↩️ Wiederhergestellt!"
-    );
-
-}
-
-
-/* =========================
-   STATISTIK
-========================= */
-
-function statistik() {
-
-    const liste =
-        listen[
-            aktuelleListe
-        ];
-
-    const gesamt =
-        liste.length;
+    const gesamt = artikel.length;
 
     const gekauft =
-        liste.filter(
-            item =>
-                item.gekauft
-        ).length;
+        artikel.filter(a => a.gekauft).length;
+
+    document.getElementById("anzahl").textContent = gesamt;
+    document.getElementById("gekauft").textContent = gekauft;
 
     const prozent =
-        gesamt === 0
-        ? 0
-        : Math.round(
-            (
-                gekauft /
-                gesamt
-            ) * 100
-        );
+        gesamt === 0 ? 0 : (gekauft / gesamt) * 100;
 
-    document.getElementById(
-        "statistik"
-    ).innerText =
-        `${gesamt} Artikel · ${gekauft} gekauft · ${prozent}% erledigt`;
-
-    document.getElementById(
-        "progress"
-    ).style.width =
+    document.getElementById("progressBar").style.width =
         prozent + "%";
-
 }
 
+function listenAnzeigen() {
 
-/* =========================
-   BEREICHE
-========================= */
+    const container =
+        document.getElementById("listButtons");
 
-function einkaufOeffnen() {
+    container.innerHTML = "";
 
-    document.getElementById(
-        "einkaufBereich"
-    ).classList.remove(
-        "hidden"
-    );
+    Object.keys(listen).forEach(name => {
 
-    document.getElementById(
-        "einstellungen"
-    ).classList.add(
-        "hidden"
-    );
+        const button =
+            document.createElement("button");
 
+        button.className =
+            "list-button " +
+            (name === aktuelleListe ? "active" : "");
+
+        button.textContent = name;
+
+        button.onclick = () => {
+
+            aktuelleListe = name;
+
+            speichern();
+            anzeigen();
+        };
+
+        container.appendChild(button);
+    });
+
+    document.getElementById("listenTitel").textContent =
+        aktuelleListe;
 }
 
+function neueListe() {
 
-function einstellungenOeffnen() {
+    const name =
+        prompt("Name der neuen Einkaufsliste:");
 
-    document.getElementById(
-        "einkaufBereich"
-    ).classList.add(
-        "hidden"
-    );
+    if (!name || !name.trim()) return;
 
-    document.getElementById(
-        "einstellungen"
-    ).classList.remove(
-        "hidden"
-    );
+    const listenName = name.trim();
 
+    if (listen[listenName]) {
+        toast("Diese Liste gibt es bereits.");
+        return;
+    }
+
+    listen[listenName] = [];
+
+    aktuelleListe = listenName;
+
+    speichern();
+    anzeigen();
+
+    toast("Neue Liste erstellt ✓");
 }
 
+function darkMode() {
 
-/* =========================
-   EXPORT
-========================= */
+    document.body.classList.toggle("dark");
 
-function exportieren() {
+    localStorage.setItem(
+        "darkMode",
+        document.body.classList.contains("dark")
+    );
+}
 
-    const backup = {
+function backupExportieren() {
 
-        version:
-            7,
-
-        datum:
-            new Date().toISOString(),
-
-        listen:
-            listen,
-
-        aktuelleListe:
-            aktuelleListe,
-
-        darkMode:
-            dunkel
-
-    };
+    const daten = JSON.stringify(listen, null, 2);
 
     const blob =
-        new Blob(
-            [
-                JSON.stringify(
-                    backup,
-                    null,
-                    2
-                )
-            ],
-            {
-                type:
-                    "application/json"
-            }
-        );
+        new Blob([daten], {
+            type: "application/json"
+        });
 
     const url =
-        URL.createObjectURL(
-            blob
-        );
+        URL.createObjectURL(blob);
 
     const a =
-        document.createElement(
-            "a"
-        );
+        document.createElement("a");
 
-    a.href =
-        url;
-
-    a.download =
-        "einkaufslisten-backup.json";
+    a.href = url;
+    a.download = "einkaufslisten-backup.json";
 
     a.click();
 
-    URL.revokeObjectURL(
-        url
-    );
+    URL.revokeObjectURL(url);
 
-    meldung(
-        "💾 Backup gespeichert"
-    );
-
+    toast("Backup gespeichert ✓");
 }
 
+function backupImportieren() {
 
-/* =========================
-   IMPORT
-========================= */
+    document.getElementById("backupDatei").click();
+}
 
-function importieren() {
+function backupDateiLaden(event) {
 
-    const input =
-        document.getElementById(
-            "importDatei"
-        );
+    const datei = event.target.files[0];
 
-    const datei =
-        input.files[0];
+    if (!datei) return;
 
-    if (!datei) {
+    const reader = new FileReader();
 
-        meldung(
-            "❌ Bitte eine Backup-Datei auswählen."
-        );
+    reader.onload = function(e) {
 
-        return;
-    }
+        try {
 
-    const reader =
-        new FileReader();
+            const daten =
+                JSON.parse(e.target.result);
 
-    reader.onload =
-        function(event) {
-
-            try {
-
-                const backup =
-                    JSON.parse(
-                        event.target.result
-                    );
-
-                if (
-                    !backup.listen ||
-                    typeof backup.listen
-                    !== "object"
-                ) {
-
-                    throw new Error();
-
-                }
-
-                listen =
-                    backup.listen;
-
-                aktuelleListe =
-                    backup.aktuelleListe
-                    ||
-                    Object.keys(
-                        listen
-                    )[0];
-
-                if (
-                    !listen[
-                        aktuelleListe
-                    ]
-                ) {
-
-                    aktuelleListe =
-                        Object.keys(
-                            listen
-                        )[0];
-
-                }
-
-                speichern();
-
-                anzeigen();
-
-                meldung(
-                    "📥 Backup importiert!"
-                );
-
-            } catch {
-
-                meldung(
-                    "❌ Backup konnte nicht gelesen werden."
-                );
-
+            if (typeof daten !== "object") {
+                throw new Error();
             }
 
-        };
+            listen = daten;
 
-    reader.readAsText(
-        datei
-    );
+            if (!listen[aktuelleListe]) {
+                aktuelleListe =
+                    Object.keys(listen)[0];
+            }
 
+            speichern();
+            anzeigen();
+
+            toast("Backup geladen ✓");
+
+        } catch {
+
+            toast("Backup ist ungültig.");
+        }
+    };
+
+    reader.readAsText(datei);
 }
-
-
-/* =========================
-   ALLES LÖSCHEN
-========================= */
 
 function allesZuruecksetzen() {
 
-    if (
-        !confirm(
-            "Wirklich ALLE Daten löschen?"
-        )
-    ) {
-        return;
-    }
+    const bestaetigung =
+        confirm(
+            "Wirklich ALLE Einkaufslisten und Daten löschen?"
+        );
+
+    if (!bestaetigung) return;
 
     listen = {
-
-        "Supermarkt": []
-
+        "Meine Einkaufsliste": []
     };
 
     aktuelleListe =
-        "Supermarkt";
+        "Meine Einkaufsliste";
+
+    letzterStand = null;
+
+    localStorage.clear();
 
     speichern();
-
     anzeigen();
 
-    meldung(
-        "🗑️ Alle Daten gelöscht"
-    );
-
+    toast("Alle Daten gelöscht");
 }
 
-
-/* =========================
-   HTML SICHER MACHEN
-========================= */
-
-function escapeHTML(text) {
-
-    return text
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+if (localStorage.getItem("darkMode") === "true") {
+    document.body.classList.add("dark");
 }
-
-
-/* =========================
-   ENTER
-========================= */
-
-document.getElementById(
-    "artikel"
-).addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            hinzufuegen();
-
-        }
-
-    }
-);
-
-
-/* =========================
-   PWA INSTALLATION
-========================= */
-
-let deferredPrompt = null;
-
-window.addEventListener(
-    "beforeinstallprompt",
-    function(event) {
-
-        event.preventDefault();
-
-        deferredPrompt =
-            event;
-
-        document.getElementById(
-            "installButton"
-        ).style.display =
-            "block";
-
-    }
-);
-
-
-async function installApp() {
-
-    if (!deferredPrompt) {
-
-        meldung(
-            "ℹ️ Installation über das Browser-Menü möglich."
-        );
-
-        return;
-    }
-
-    deferredPrompt.prompt();
-
-    const result =
-        await deferredPrompt.userChoice;
-
-    if (
-        result.outcome === "accepted"
-    ) {
-
-        meldung(
-            "📱 App wird installiert!"
-        );
-
-    }
-
-    deferredPrompt =
-        null;
-
-}
-
-
-/* =========================
-   SERVICE WORKER
-========================= */
-
-if (
-    "serviceWorker"
-    in navigator
-) {
-
-    window.addEventListener(
-        "load",
-        () => {
-
-            navigator.serviceWorker
-                .register(
-                    "./sw.js"
-                )
-                .then(
-                    () => {
-
-                        console.log(
-                            "Service Worker aktiv"
-                        );
-
-                    }
-                )
-                .catch(
-                    error => {
-
-                        console.log(
-                            "Service Worker Fehler:",
-                            error
-                        );
-
-                    }
-                );
-
-        }
-    );
-
-}
-
-
-/* =========================
-   DARK MODE START
-========================= */
-
-if (dunkel) {
-
-    document.body.classList.add(
-        "dark"
-    );
-
-}
-
-
-/* =========================
-   START
-========================= */
 
 anzeigen();
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", () => {
+
+        navigator.serviceWorker
+            .register("./sw.js")
+            .then(() => {
+                console.log("Service Worker aktiv");
+            })
+            .catch(error => {
+                console.log(
+                    "Service Worker Fehler:",
+                    error
+                );
+            });
+
+    });
+}
 
 </script>
 
